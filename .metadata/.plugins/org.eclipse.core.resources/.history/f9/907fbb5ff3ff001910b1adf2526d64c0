@@ -1,0 +1,9 @@
+package com.ecna.hibernate.ejemplojpa;
+
+public class App 
+{
+    public static void main( String[] args )
+    {
+        System.out.println( "Hello World!" );
+    }
+}

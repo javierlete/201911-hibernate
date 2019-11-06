@@ -1,0 +1,50 @@
+package com.ecna.hibernate.operacionesbasicas;
+
+import org.hibernate.Session;
+
+public class App {
+	public static void main(String[] args) {
+		
+		Session session = HibernateUtil.getSessionFactory().openSession();
+		
+		session.beginTransaction();
+		
+		session.save(new Alumno(null, "Javier", "Lete"));
+		
+		session.getTransaction().commit();
+		
+		session.beginTransaction();
+		
+		Alumno alumno = session.get(Alumno.class, 1L);
+		
+		System.out.println(alumno);
+		
+		System.out.println("(Original) nombre: " + alumno.getNombre());
+		// evict the object
+		session.evict(alumno);
+		
+		alumno.setNombre("Pasan de mí");
+		
+		session.flush();
+		
+		//alumno = session.get(Alumno.class, 1L);
+		
+		//System.out.println("(Después de evict) nombre: " + alumno.getNombre());
+		// merge the object
+		session.merge(alumno);
+		
+		alumno.setApellidos("Otros apellidos");
+		
+		//alumno.setNombre("The Expert");
+		
+		session.flush();
+		
+		alumno = session.get(Alumno.class, 1L);
+		
+		System.out.println("(Después de merge) nombre: " + alumno.getNombre());
+		
+		session.getTransaction().commit();
+		
+		session.close();
+	}
+}

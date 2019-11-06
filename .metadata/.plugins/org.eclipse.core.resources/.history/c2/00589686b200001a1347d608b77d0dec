@@ -1,0 +1,8 @@
+package com.ecna.hibernate.operacionesbasicas;
+
+import lombok.Data;
+
+public @Data class Alumno {
+	private Long id;
+	private String nombre, apellidos;
+}

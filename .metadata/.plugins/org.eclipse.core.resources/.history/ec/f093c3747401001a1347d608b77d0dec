@@ -1,0 +1,5 @@
+package com.ecna.hibernate.ejemplosbasicos.mappings.unoauno;
+
+public class Stock {
+
+}

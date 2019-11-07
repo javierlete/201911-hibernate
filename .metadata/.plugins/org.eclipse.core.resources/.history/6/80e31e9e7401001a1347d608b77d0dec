@@ -1,0 +1,11 @@
+package com.ecna.hibernate.ejemplosbasicos.mappings.unoauno;
+
+@Data
+public class Stock implements java.io.Serializable {
+
+	private Integer stockId;
+	private String stockCode;
+	private String stockName;
+	private StockDetail stockDetail;
+	
+}

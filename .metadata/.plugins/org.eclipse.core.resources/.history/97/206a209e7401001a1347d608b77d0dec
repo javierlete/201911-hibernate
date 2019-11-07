@@ -1,0 +1,16 @@
+package com.ecna.hibernate.ejemplosbasicos.mappings.unoauno;
+
+import java.util.Date;
+
+public class StockDetail implements java.io.Serializable {
+
+	private Integer stockId;
+	private Stock stock;
+	private String compName;
+	private String compDesc;
+	private String remark;
+	private Date listedDate;
+
+	//constructor & getter and setter methods
+
+}

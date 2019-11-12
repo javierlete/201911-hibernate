@@ -203,4 +203,8 @@
   <uri name="http://www.w3.org/2001/XMLSchema" uri="jar:file:/C:/eclipse/plugins/org.eclipse.xsd_2.16.0.v20190625-1130.jar!/cache/www.w3.org/2001/XMLSchema.xsd"/>
   <uri id="org.w3c.xinclude" name="http://www.w3.org/2001/XInclude" uri="jar:file:/C:/eclipse/plugins/org.eclipse.wst.xsl.core_1.2.100.v201907231732.jar!/xslt-schemas/xinclude.xsd"/>
   <public publicId="-//LOG4J//DTD LOG4J//EN" uri="jar:file:/C:/eclipse/plugins/org.springsource.ide.eclipse.commons.ui_3.9.11.201910020638-CI-B485.jar!/dtd/log4j-1.2.dtd" webURL="https://logging.apache.org/log4j/1.2/apidocs/org/apache/log4j/xml/doc-files/log4j.dtd"/>
+  <public publicId="-//Hibernate/Hibernate Mapping DTD 3.0//EN" uri="file:/C:/eclipse/plugins/org.hibernate.eclipse.mapper_5.4.6.v20190710-1110/dtd/hibernate-mapping-3.0.dtd" webURL="http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd"/>
+  <public publicId="-//Hibernate/Hibernate Configuration DTD 3.0//EN" uri="file:/C:/eclipse/plugins/org.hibernate.eclipse.mapper_5.4.6.v20190710-1110/dtd/hibernate-configuration-3.0.dtd" webURL="http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd"/>
+  <public publicId="-//Hibernate/Hibernate Reverse Engineering DTD 3.0//EN" uri="file:/C:/eclipse/plugins/org.hibernate.eclipse.mapper_5.4.6.v20190710-1110/dtd/hibernate-reverse-engineering-3.0.dtd"/>
+  <public publicId="-//Red Hat, Inc.//DTD Meta 1.0//EN" uri="file:/C:/eclipse/plugins/org.jboss.tools.common.model_3.11.0.v20190403-0927/schema/meta.dtd"/>
 </catalog>

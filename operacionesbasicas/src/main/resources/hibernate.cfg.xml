@@ -33,16 +33,23 @@
 		<property name="show_sql">true</property>
 
 		<!-- Drop and re-create the database schema on startup -->
-		<property name="hbm2ddl.auto">update</property>
+		<property name="hbm2ddl.auto">create-drop</property>
 
 		<mapping resource="com/ecna/hibernate/operacionesbasicas/Alumno.hbm.xml" />
 		
 		<!-- Ejemplo Uno a Uno -->
 		<mapping resource="com/ecna/hibernate/mappings/unoauno/Stock.hbm.xml" />
     	<mapping resource="com/ecna/hibernate/mappings/unoauno/StockDetail.hbm.xml" />
-    	<!-- Ejemplo Uno a Varios -->
-    	<mapping resource="com/ecna/hibernate/mappings/unoavarios/Profesor.hbm.xml" />
-    	<mapping resource="com/ecna/hibernate/mappings/unoavarios/Curso.hbm.xml" />
+    	<!-- Ejemplo Uno a Varios (Set) -->
+<!--     	<mapping resource="com/ecna/hibernate/mappings/unoavarios/Profesor.hbm.xml" /> -->
+<!--     	<mapping resource="com/ecna/hibernate/mappings/unoavarios/Curso.hbm.xml" /> -->
+    	<!-- Ejemplo Uno a Varios (List) -->
+    	<mapping resource="com/ecna/hibernate/mappings/unoavarioslist/Cuenta.hbm.xml" />
+    	<mapping resource="com/ecna/hibernate/mappings/unoavarioslist/Movimiento.hbm.xml" />
+    	<!-- Ejemplo Varios a Varios -->
+    	<mapping resource="com/ecna/hibernate/mappings/variosavarios/Curso.hbm.xml" />
+    	<mapping resource="com/ecna/hibernate/mappings/variosavarios/Profesor.hbm.xml" />
+    	
 	</session-factory>
 
 </hibernate-configuration>

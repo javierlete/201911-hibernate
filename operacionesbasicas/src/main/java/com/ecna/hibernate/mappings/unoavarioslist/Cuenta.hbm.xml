@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="com.ecna.hibernate.mappings.unoavarioslist.Cuenta" table="cuentas" catalog="ecna">
+		<id name="id">
+			<generator class="identity" />
+		</id>
+		<property name="numero" />
+		<bag name="movimientos">
+			<key column="cuenta_id"/>
+			<one-to-many class="com.ecna.hibernate.mappings.unoavarioslist.Movimiento"/>
+		</bag>
+<!-- 		<list name="movimientos"> -->
+<!-- 			<key column="cuenta_id"/> -->
+<!-- 			<list-index column="movimiento_index"/> -->
+<!-- 			<one-to-many class="com.ecna.hibernate.mappings.unoavarioslist.Movimiento"/> -->
+<!-- 		</list> -->
+	</class>
+</hibernate-mapping>

@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="com.ecna.hibernate.mappings.variosavarios.Profesor" table="profesoresvarios" catalog="ecna">
+		<id name="id">
+			<generator class="identity" />
+		</id>
+		<property name="nombre" />
+		<property name="apellidos" />
+		
+		<set name="cursos" table="profesores_cursos" inverse="true" cascade="all">
+			<key column="profesor_id"/>
+			<many-to-many column="curso_id" class="com.ecna.hibernate.mappings.variosavarios.Curso"/>
+		</set>
+	</class>
+</hibernate-mapping>

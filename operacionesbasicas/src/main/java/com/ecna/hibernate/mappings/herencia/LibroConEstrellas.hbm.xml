@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 12 nov. 2019 17:12:47 by Hibernate Tools 3.5.0.Final -->
+<hibernate-mapping>
+    <subclass name="com.ecna.hibernate.mappings.herencia.LibroConEstrellas" extends="com.ecna.hibernate.mappings.herencia.Libro"
+    	discriminator-value="LE">
+        <property name="estrellas" type="int"/>
+    </subclass>
+<!--     <joined-subclass name="com.ecna.hibernate.mappings.herencia.LibroConEstrellas" extends="com.ecna.hibernate.mappings.herencia.Libro" table="librosconestrellas" lazy="false"> -->
+<!--         <key> -->
+<!--             <column name="id" /> -->
+<!--         </key> -->
+<!--         <property name="estrellas" type="int"/> -->
+<!--     </joined-subclass> -->
+</hibernate-mapping>

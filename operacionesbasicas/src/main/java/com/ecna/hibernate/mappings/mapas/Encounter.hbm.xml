@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 12 nov. 2019 16:39:30 by Hibernate Tools 3.5.0.Final -->
+<hibernate-mapping>
+    <class name="com.ecna.hibernate.mappings.mapas.Encounter" table="encounters">
+        <id name="id">
+            <generator class="identity" />
+        </id>
+        <property name="nombre"/>
+        <map name="asistentes">
+            <key column="id" />
+            <index column="apodoasistente" type="string" />
+            <element column="nombreasistente" type="string" />
+        </map>
+    </class>
+</hibernate-mapping>

@@ -3,12 +3,21 @@ package com.ecna.hibernate;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 
+import org.hibernate.Criteria;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
+import org.hibernate.criterion.Restrictions;
 
+import com.ecna.hibernate.mappings.composicion.Dni;
+import com.ecna.hibernate.mappings.composicion.Empleado;
+import com.ecna.hibernate.mappings.herencia.Libro;
+import com.ecna.hibernate.mappings.herencia.LibroConEstrellas;
+import com.ecna.hibernate.mappings.herencia.LibroRegistrado;
+import com.ecna.hibernate.mappings.mapas.Encounter;
 import com.ecna.hibernate.mappings.unoauno.Stock;
 import com.ecna.hibernate.mappings.unoauno.StockDetail;
 import com.ecna.hibernate.mappings.unoavarios.Curso;
@@ -17,9 +26,111 @@ import com.ecna.hibernate.mappings.unoavarioslist.Cuenta;
 import com.ecna.hibernate.mappings.unoavarioslist.Movimiento;
 import com.ecna.hibernate.operacionesbasicas.Alumno;
 
+import static org.hibernate.criterion.Restrictions.*;
+
 public class App {
 	public static void main(String[] args) {
-		ejemploVariosAVarios();
+		ejemploCriteria();
+	}
+
+	private static void ejemploCriteria() {
+		Session session = HibernateUtil.getSessionFactory().openSession();
+		Criteria criteria = session.createCriteria(Libro.class);
+		
+		criteria
+//			.setFirstResult(1)
+//			.setMaxResults(2)
+			.add(or(ilike("nombre", "%li%"), gt("id", 3L)));
+		
+		List<Libro> libros = criteria.list();
+		
+		for(Libro libro: libros) {
+			System.out.println(libro);
+		}
+	}
+
+	private static void ejemploHerencia() {
+		Libro libro = new Libro(null, "Mi libro");
+		LibroRegistrado libroRegistrado = new LibroRegistrado(null, "La Historia Interminable: hibernate", "123-123-123");
+		LibroConEstrellas libroConEstrellas = new LibroConEstrellas(null, "Como sobrevivir a hibernate", 5);
+		
+		System.out.println(libro);
+		System.out.println(libroRegistrado);
+		System.out.println(libroConEstrellas);
+		
+		Session session = HibernateUtil.getSessionFactory().openSession();
+
+		session.getTransaction().begin();
+
+		session.save(libro);
+		session.save(libroRegistrado);
+		session.save(libroConEstrellas);
+
+		session.getTransaction().commit();
+		
+		session.clear();
+		
+		Libro l = session.load(Libro.class, 1L);
+		LibroRegistrado lr= session.load(LibroRegistrado.class, 2L);
+		LibroConEstrellas le = session.load(LibroConEstrellas.class, 3L);
+		
+		System.out.println(l);
+		System.out.println(lr);
+		System.out.println(le);
+		
+		System.out.println("---------------------------");
+		List<Libro> libros = session.createQuery("from Libro").list();
+		
+		for(Libro lib: libros) {
+			System.out.println(lib);
+		}
+	}
+
+	public static void ejemploMaps() {
+		Encounter e = new Encounter();
+
+		e.setNombre("Euskal Encounter");
+		
+		e.setAsistentes(new HashMap<>());
+
+		e.getAsistentes().put("Mutante", "Javier");
+		e.getAsistentes().put("Pelutxito", "Pepe");
+
+		System.out.println(e.getAsistentes().get("Pelutxito"));
+
+		Session session = HibernateUtil.getSessionFactory().openSession();
+
+		session.getTransaction().begin();
+
+		session.save(e);
+
+		session.getTransaction().commit();
+		
+		session.evict(e);
+		
+		Encounter encounter = session.load(Encounter.class, 1L);
+		
+		System.out.println(encounter.getAsistentes().get("Mutante"));
+	}
+
+	public static void ejemploComposicion() {
+		Empleado empleado = new Empleado(null, "Javier", new Dni("12345678", 'Z'));
+
+		System.out.println(empleado);
+
+		Session session = HibernateUtil.getSessionFactory().openSession();
+
+		session.getTransaction().begin();
+
+		session.save(empleado);
+
+		session.getTransaction().commit();
+
+		session.evict(empleado);
+
+		Empleado e = session.load(Empleado.class, 1L);
+
+		System.out.println(e.getDni().getLetra());
 	}
 
 	public static void ejemploVariosAVarios() {
@@ -44,42 +155,42 @@ public class App {
 
 		for (com.ecna.hibernate.mappings.variosavarios.Curso c : profesor.getCursos()) {
 			System.out.println(c);
-			
+
 			for (com.ecna.hibernate.mappings.variosavarios.Profesor p : c.getProfesores()) {
 				System.out.println(p);
 			}
 		}
-		
+
 		Session session = HibernateUtil.getSessionFactory().openSession();
-		
+
 		session.getTransaction().begin();
-		
+
 		session.save(profesor);
 		session.save(profesor2);
 		session.save(cursoNET);
 		session.save(cursoJava);
-		
+
 		session.getTransaction().commit();
-		
+
 		System.out.println(profesor);
 		System.out.println(profesor2);
 		System.out.println(cursoNET);
 		System.out.println(cursoJava);
-		
+
 		session.getTransaction().begin();
-		
+
 		List<com.ecna.hibernate.mappings.variosavarios.Curso> cursos;
 
 		cursos = session.createQuery("from Curso").list();
-		
+
 		for (com.ecna.hibernate.mappings.variosavarios.Curso c : cursos) {
 			System.out.println(c);
-			
+
 			for (com.ecna.hibernate.mappings.variosavarios.Profesor p : c.getProfesores()) {
 				System.out.println(p);
 			}
 		}
-		
+
 		session.getTransaction().commit();
 	}
 

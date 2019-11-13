@@ -5,46 +5,59 @@
 	GNU Lesser General Public License (LGPL), version 2.1 or later. ~ See the 
 	lgpl.txt file in the root directory or <http://www.gnu.org/licenses/lgpl-2.1.html>. -->
 <hibernate-configuration>
- <session-factory>
-  <!-- Database connection settings 
- 		<property name="connection.driver_class">org.h2.Driver</property> 
- 		<property name="connection.driver_class">org.sqlite.JDBC</property> -->
-  <property name="connection.driver_class">com.mysql.cj.jdbc.Driver</property>
-  <!-- 		<property name="connection.url">jdbc:h2:mem:db1;DB_CLOSE_DELAY=-1</property> 
- 		<property name="connection.url">jdbc:sqlite:bdd\ejemplos.sqlite</property> -->
-  <property name="connection.url">jdbc:mysql://localhost:3306/ecna?serverTimezone=UTC</property>
-  <property name="connection.username">root</property>
-  <property name="connection.password"/>
-  <!-- JDBC connection pool (use the built-in) -->
-  <property name="connection.pool_size">1</property>
-  <!-- SQL dialect -->
-  <property name="dialect">org.hibernate.dialect.MySQL8Dialect</property>
-  <!-- Disable the second-level cache -->
-  <property name="cache.provider_class">org.hibernate.cache.internal.NoCacheProvider</property>
-  <!-- Echo all executed SQL to stdout -->
-  <property name="show_sql">true</property>
-  <!-- Drop and re-create the database schema on startup -->
-  <property name="hbm2ddl.auto">update</property>
-  <mapping resource="com/ecna/hibernate/operacionesbasicas/Alumno.hbm.xml"/>
-  <!-- Ejemplo Uno a Uno -->
-  <mapping resource="com/ecna/hibernate/mappings/unoauno/Stock.hbm.xml"/>
-  <mapping resource="com/ecna/hibernate/mappings/unoauno/StockDetail.hbm.xml"/>
-  <!-- Ejemplo Uno a Varios (Set) 
-     	<mapping resource="com/ecna/hibernate/mappings/unoavarios/Profesor.hbm.xml" /> 
-     	<mapping resource="com/ecna/hibernate/mappings/unoavarios/Curso.hbm.xml" /> 
- Ejemplo Uno a Varios (List) -->
-  <mapping resource="com/ecna/hibernate/mappings/unoavarioslist/Cuenta.hbm.xml"/>
-  <mapping resource="com/ecna/hibernate/mappings/unoavarioslist/Movimiento.hbm.xml"/>
-  <!-- Ejemplo Varios a Varios -->
-  <mapping resource="com/ecna/hibernate/mappings/variosavarios/Curso.hbm.xml"/>
-  <mapping resource="com/ecna/hibernate/mappings/variosavarios/Profesor.hbm.xml"/>
-  <!-- Ejemplo de composicion -->
-  <mapping resource="com/ecna/hibernate/mappings/composicion/Empleado.hbm.xml"/>
-  <!-- Ejemplo de mapas -->
-  <mapping resource="com/ecna/hibernate/mappings/mapas/Encounter.hbm.xml"/>
-  <!-- Ejemplo de herencia -->
-  <mapping resource="com/ecna/hibernate/mappings/herencia/Libro.hbm.xml"/>
-  <mapping resource="com/ecna/hibernate/mappings/herencia/LibroConEstrellas.hbm.xml"/>
-  <mapping resource="com/ecna/hibernate/mappings/herencia/LibroRegistrado.hbm.xml"/>
- </session-factory>
+	<session-factory>
+		<!-- Database connection settings <property name="connection.driver_class">org.h2.Driver</property> 
+			<property name="connection.driver_class">org.sqlite.JDBC</property> -->
+		<property name="connection.driver_class">com.mysql.cj.jdbc.Driver</property>
+		<!-- <property name="connection.url">jdbc:h2:mem:db1;DB_CLOSE_DELAY=-1</property> 
+			<property name="connection.url">jdbc:sqlite:bdd\ejemplos.sqlite</property> -->
+		<property name="connection.url">jdbc:mysql://localhost:3306/ecna?serverTimezone=UTC</property>
+		<property name="connection.username">root</property>
+		<property name="connection.password" />
+		<!-- JDBC connection pool (use the built-in) -->
+		<property name="connection.pool_size">1</property>
+		<!-- SQL dialect -->
+		<property name="dialect">org.hibernate.dialect.MySQL8Dialect</property>
+		<!-- Disable the second-level cache -->
+		<property name="cache.provider_class">org.hibernate.cache.internal.NoCacheProvider</property>
+		<!-- Echo all executed SQL to stdout -->
+		<property name="show_sql">true</property>
+		<!-- Drop and re-create the database schema on startup -->
+		<property name="hbm2ddl.auto">update</property>
+		<mapping
+			resource="com/ecna/hibernate/operacionesbasicas/Alumno.hbm.xml" />
+		<!-- Ejemplo Uno a Uno -->
+		<mapping
+			resource="com/ecna/hibernate/mappings/unoauno/Stock.hbm.xml" />
+		<mapping
+			resource="com/ecna/hibernate/mappings/unoauno/StockDetail.hbm.xml" />
+		<!-- Ejemplo Uno a Varios (Set) -->
+		<mapping
+			resource="com/ecna/hibernate/mappings/unoavarios/Profesor.hbm.xml" />
+		<mapping
+			resource="com/ecna/hibernate/mappings/unoavarios/Curso.hbm.xml" />
+		<!-- Ejemplo Uno a Varios (List) -->
+		<mapping
+			resource="com/ecna/hibernate/mappings/unoavarioslist/Cuenta.hbm.xml" />
+		<mapping
+			resource="com/ecna/hibernate/mappings/unoavarioslist/Movimiento.hbm.xml" />
+		<!-- Ejemplo Varios a Varios -->
+<!-- 		<mapping -->
+<!-- 			resource="com/ecna/hibernate/mappings/variosavarios/Curso.hbm.xml" /> -->
+<!-- 		<mapping -->
+<!-- 			resource="com/ecna/hibernate/mappings/variosavarios/Profesor.hbm.xml" /> -->
+		<!-- Ejemplo de composicion -->
+		<mapping
+			resource="com/ecna/hibernate/mappings/composicion/Empleado.hbm.xml" />
+		<!-- Ejemplo de mapas -->
+		<mapping
+			resource="com/ecna/hibernate/mappings/mapas/Encounter.hbm.xml" />
+		<!-- Ejemplo de herencia -->
+		<mapping
+			resource="com/ecna/hibernate/mappings/herencia/Libro.hbm.xml" />
+		<mapping
+			resource="com/ecna/hibernate/mappings/herencia/LibroConEstrellas.hbm.xml" />
+		<mapping
+			resource="com/ecna/hibernate/mappings/herencia/LibroRegistrado.hbm.xml" />
+	</session-factory>
 </hibernate-configuration>

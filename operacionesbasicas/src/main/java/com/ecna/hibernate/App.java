@@ -1,6 +1,11 @@
 package com.ecna.hibernate;
 
+import static org.hibernate.criterion.Restrictions.gt;
+import static org.hibernate.criterion.Restrictions.ilike;
+import static org.hibernate.criterion.Restrictions.or;
+
 import java.math.BigDecimal;
+import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -8,10 +13,15 @@ import java.util.HashSet;
 import java.util.List;
 
 import org.hibernate.Criteria;
+import org.hibernate.FetchMode;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
-import org.hibernate.criterion.Restrictions;
+import org.hibernate.criterion.Example;
+import org.hibernate.criterion.Order;
+import org.hibernate.criterion.ProjectionList;
+import org.hibernate.criterion.Projections;
 
+import com.ecna.hibernate.dto.EmpleadoNombreNumero;
 import com.ecna.hibernate.mappings.composicion.Dni;
 import com.ecna.hibernate.mappings.composicion.Empleado;
 import com.ecna.hibernate.mappings.herencia.Libro;
@@ -26,38 +36,194 @@ import com.ecna.hibernate.mappings.unoavarioslist.Cuenta;
 import com.ecna.hibernate.mappings.unoavarioslist.Movimiento;
 import com.ecna.hibernate.operacionesbasicas.Alumno;
 
-import static org.hibernate.criterion.Restrictions.*;
-
 public class App {
 	public static void main(String[] args) {
-		ejemploCriteria();
+		ejemploNativeSQL();
+	}
+
+	private static void ejemploNativeSQL() {
+		Session session = HibernateUtil.getSessionFactory().openSession();
+		
+		List<Object[]> consulta = session.createSQLQuery("SELECT * FROM profesores").list();
+		
+		for(Object[] fila: consulta) {
+			
+			for(Object columna: fila) {
+				System.out.println(columna);
+			}
+			System.out.println();
+		}
+		
+		List<Profesor> profesores = session.createNativeQuery("SELECT * FROM profesores", Profesor.class).list();
+		
+		for(Profesor profesor: profesores) {
+			System.out.println(profesor);
+		}
+	}
+
+	private static void ejemploHQL() {
+		Session session = HibernateUtil.getSessionFactory().openSession();
+		
+		System.out.println("Cuentas sin tipo (como campos)");
+		
+		List<Object[]> resultado = session.createQuery("from Cuenta c left outer join c.movimientos").list();
+
+		for (Object[] fila : resultado) {
+			for (Object columna : fila) {
+				System.out.print("Dato: " + columna + ", ");
+
+				if (columna instanceof Cuenta) {
+					System.out.println("MOVIMIENTOS: " + ((Cuenta) columna).getMovimientos());
+				}
+			}
+			System.out.println();
+		}
+
+		System.out.println("Cuentas con tipo");
+		
+		List<Cuenta> cuentas = session.createQuery("select c from Cuenta c left outer join c.movimientos").list();
+
+		for (Cuenta cuenta : cuentas) {
+			System.out.print(cuenta);
+			System.out.println("MOVIMIENTOS: " + cuenta.getMovimientos());
+
+		}
+		
+		System.out.println("Números de cuenta");
+		
+		List<String> numerosDeCuenta = session.createQuery("select c.numero from Cuenta c").list();
+		
+		for(String numero: numerosDeCuenta) {
+			System.out.println(numero);
+		}
+		
+		System.out.println("Números de DNI");
+		
+		List<Object[]> numerosDeDni = session.createQuery("select e.nombre, e.dni.numero from Empleado e").list();
+		
+		for(Object[] campos: numerosDeDni) {
+			System.out.println(campos[0]);
+			System.out.println(campos[1]);
+		}
+		
+		System.out.println("Empleado Nombre Numero");
+		
+		List<EmpleadoNombreNumero> datos = session.createQuery(
+				"select new com.ecna.hibernate.dto.EmpleadoNombreNumero(e.nombre, e.dni.numero) from Empleado e").list();
+				
+		for(EmpleadoNombreNumero dato: datos) {
+			System.out.println(dato.getNombre());
+			System.out.println(dato.getNumero());
+		}
+		
+		System.out.println("Lista de listas");
+		
+		List<List<String>> listas = session.createQuery(
+				"select new list(e.nombre, e.dni.numero) from Empleado e").list();
+				
+		for(List<String> lista: listas) {
+			System.out.println(lista.get(0));
+			System.out.println(lista.get(1));
+		}
+		
+		System.out.println("Prueba de named Query");
+		
+//		List<Profesor> profesores = session
+//				.createQuery("select p from Profesor p inner join p.cursos c where c.nombre='PHP'").list();
+//
+//		for (Profesor profesor : profesores) {
+//
+//			System.out.println(profesor);
+//		}
+		
+		List<Profesor> profesores = session.getNamedQuery("profesPHP").list();
+		
+		for(Profesor profesor: profesores) {
+
+			System.out.println(profesor);
+		}
+		
+		System.out.println("Listado de todos los objetos");
+		
+		List<Object> objetos = session.createQuery("from java.lang.Object").list();
+		
+		for(Object o: objetos) {
+			System.out.println(o);
+		}
 	}
 
 	private static void ejemploCriteria() {
 		Session session = HibernateUtil.getSessionFactory().openSession();
 		Criteria criteria = session.createCriteria(Libro.class);
-		
+
 		criteria
 //			.setFirstResult(1)
 //			.setMaxResults(2)
-			.add(or(ilike("nombre", "%li%"), gt("id", 3L)));
-		
-		List<Libro> libros = criteria.list();
-		
-		for(Libro libro: libros) {
-			System.out.println(libro);
+				.add(or(ilike("nombre", "%li%"), gt("id", 3L)));
+
+		criteria.addOrder(Order.desc("nombre"));
+
+		ProjectionList pl = Projections.projectionList();
+
+		pl.add(Projections.rowCount());
+		pl.add(Projections.avg("estrellas"));
+		pl.add(Projections.count("isbn"));
+		// pl.add(Projections.property("isbn"));
+
+		criteria.setProjection(pl);
+
+		Object[] l = (Object[]) criteria.uniqueResult();
+
+		for (Object o : l) {
+			System.out.println(o);
+		}
+
+		// Long resultado = (Long) criteria.uniqueResult();
+
+		// System.out.println(resultado);
+
+//		List<Libro> libros = criteria.list();
+//		
+//		for(Libro libro: libros) {
+//			System.out.println(libro);
+//		}
+
+		criteria = session.createCriteria(Cuenta.class);
+
+		criteria.setFetchMode("movimientos", FetchMode.JOIN);
+
+		for (Cuenta c : (List<Cuenta>) criteria.list()) {
+			System.out.println(c);
+			System.out.println(c.getMovimientos());
+		}
+
+		Cuenta cuenta = new Cuenta();
+		cuenta.setNumero("321-321-321");
+
+		criteria = session.createCriteria(Cuenta.class);
+
+		criteria.add(Example.create(cuenta));
+
+		criteria.setFetchMode("movimientos", FetchMode.JOIN);
+
+		criteria.list();
+
+		for (Cuenta c : (List<Cuenta>) criteria.list()) {
+			System.out.println("Cuenta basada en ejemplo: " + c);
+			System.out.println(c.getMovimientos());
 		}
 	}
 
 	private static void ejemploHerencia() {
 		Libro libro = new Libro(null, "Mi libro");
-		LibroRegistrado libroRegistrado = new LibroRegistrado(null, "La Historia Interminable: hibernate", "123-123-123");
+		LibroRegistrado libroRegistrado = new LibroRegistrado(null, "La Historia Interminable: hibernate",
+				"123-123-123");
 		LibroConEstrellas libroConEstrellas = new LibroConEstrellas(null, "Como sobrevivir a hibernate", 5);
-		
+
 		System.out.println(libro);
 		System.out.println(libroRegistrado);
 		System.out.println(libroConEstrellas);
-		
+
 		Session session = HibernateUtil.getSessionFactory().openSession();
 
 		session.getTransaction().begin();
@@ -67,21 +233,21 @@ public class App {
 		session.save(libroConEstrellas);
 
 		session.getTransaction().commit();
-		
+
 		session.clear();
-		
+
 		Libro l = session.load(Libro.class, 1L);
-		LibroRegistrado lr= session.load(LibroRegistrado.class, 2L);
+		LibroRegistrado lr = session.load(LibroRegistrado.class, 2L);
 		LibroConEstrellas le = session.load(LibroConEstrellas.class, 3L);
-		
+
 		System.out.println(l);
 		System.out.println(lr);
 		System.out.println(le);
-		
+
 		System.out.println("---------------------------");
 		List<Libro> libros = session.createQuery("from Libro").list();
-		
-		for(Libro lib: libros) {
+
+		for (Libro lib : libros) {
 			System.out.println(lib);
 		}
 	}
@@ -90,7 +256,7 @@ public class App {
 		Encounter e = new Encounter();
 
 		e.setNombre("Euskal Encounter");
-		
+
 		e.setAsistentes(new HashMap<>());
 
 		e.getAsistentes().put("Mutante", "Javier");
@@ -105,11 +271,11 @@ public class App {
 		session.save(e);
 
 		session.getTransaction().commit();
-		
+
 		session.evict(e);
-		
+
 		Encounter encounter = session.load(Encounter.class, 1L);
-		
+
 		System.out.println(encounter.getAsistentes().get("Mutante"));
 	}
 
